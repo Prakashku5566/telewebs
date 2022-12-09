@@ -1,13 +1,18 @@
 const mongoose =require("mongoose")
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
-const UserSchema = new mongoose.Schema({
-     Name :{type:String},
+const studentSchema = new mongoose.Schema({
+     StudentName :{type:String},
      Subject:{type:String},
      Marks :{type:Number},
-     email:{type:String},
-     password:{type:String}
+     userid:{type:ObjectId,
+    ref:"user"},
+    isdeleted:{
+      type:Boolean,
+      default:false
+    }
 },
 
   {timestamp:true})
 
-module.exports =mongoose.model("Student",UserSchema)
+module.exports =mongoose.model("Student",studentSchema)
