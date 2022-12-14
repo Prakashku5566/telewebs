@@ -166,4 +166,26 @@ const geStudentByquery = async (req, res) => {
     }
 }
 
-module.exports={createstudent,updatestudent,geStudentByquery}
+const DeletedStudent = async function (req, res) {
+    try {
+
+        let studentid = req.params.studentid
+        if (!mongoose.Types.ObjectId.isValid(studentid))
+            return res.status(400).send({ status: false, msg: "please enter valid studentid" })
+        const savedata = await studentmodel.findById(studentid)
+        if (savedata.isDeleted == true) {
+            return res.status(404).send({ status: false, message: "studentid is already deleted" })
+        }
+
+        const deleteBook = await studentmodel.findByIdAndUpdate({ _id: studentid }, { $set: { isDeleted: true, deletedAt: Date.now() } });
+        return res.status(200).send({ status: true, message: "studentid has been deleted successfully" })
+
+
+    } catch (error) {
+       return res.status(500).send({ status: false, msg: error.message });
+
+    }
+}
+
+
+module.exports={createstudent,updatestudent,geStudentByquery,DeletedStudent}
